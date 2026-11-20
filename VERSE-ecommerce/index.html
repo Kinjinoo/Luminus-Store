@@ -48,7 +48,11 @@
 <label>ชื่อผู้รับ<input name="name" required autocomplete="name"></label><label>เบอร์โทรศัพท์<input name="phone" type="tel" required pattern="[0-9+() -]{9,15}" autocomplete="tel"></label><label>อีเมล<input name="email" type="email" autocomplete="email"></label><label>ที่อยู่จัดส่ง<textarea name="address" rows="3" required></textarea></label>
 <div class="bank"><small>โอนเงินผ่านธนาคาร</small><b id="bankName"></b><strong id="bankAccount"></strong><span id="bankOwner"></span><button type="button" class="text-button" id="copyBank">คัดลอกเลขบัญชี</button></div>
 <label>แนบสลิปโอนเงิน (จำเป็น)<input type="file" id="slip" accept="image/png,image/jpeg,image/webp" required></label><div id="slipName" class="muted tiny">ยังไม่ได้เลือกไฟล์</div>
-<label class="check"><input type="checkbox" required> ยืนยันว่าข้อมูลถูกต้องและได้โอนเงินแล้ว</label><button class="btn dark wide" type="submit" id="placeOrder">ยืนยันคำสั่งซื้อ</button>
+<div class="bank" style="text-align:center">
+  <small>สแกน QR Code เพื่อชำระเงิน</small>
+  <img src="prompay.jpg" alt="QR Code ชำระเงิน" style="width:200px;max-width:100%;margin:10px auto;display:block;border-radius:8px">
+  <span id="bankOwner"></span>
+</div>
 </form><aside class="summary"><h3>สรุปรายการ</h3><div id="checkoutLines"></div><div class="total"><span>สินค้า</span><b id="sumSubtotal"></b></div><div class="total"><span>จัดส่ง</span><b id="sumShipping"></b></div><div class="total grand"><span>ยอดชำระ</span><b id="sumTotal"></b></div></aside></div></div></div>
 <div id="toast" class="toast" role="status"></div>
 </body></html>
