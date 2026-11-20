@@ -8,5 +8,5 @@ window.VERSE_CONFIG = {
   BANK_ACCOUNT: "142-8-86035-3",
   BANK_OWNER: "พงศ์พัฒน์ โพธิ์พันธุ์",
   SHIPPING_FEE: 50,
-  FREE_SHIPPING_AT: 55000,
+  FREE_SHIPPING_AT: 1500,
 };
