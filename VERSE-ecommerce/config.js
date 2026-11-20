@@ -3,7 +3,7 @@
 window.VERSE_CONFIG = {
   SUPABASE_URL: "https://dfqmgehvkbbiopctcsmm.supabase.co",
   SUPABASE_ANON_KEY: "sb_publishable_A9GsfFbk_2cDLfaGptqeoA_noJX1M-9",
-  STORE_NAME: "VÉRSE",
+  STORE_NAME: "Luminus",
   BANK_NAME: "KASIKORNBANK",
   BANK_ACCOUNT: "142-8-86035-3",
   BANK_OWNER: "พงศ์พัฒน์ โพธิ์พันธุ์",
