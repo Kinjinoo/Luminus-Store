@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VÉRSE Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script><script defer src="admin.js"></script></head>
+<body class="admin-body"><header class="header"><a class="logo" href="index.html">VÉRSE<span>.</span></a><b>ADMIN STUDIO</b><button class="btn outline" id="adminLogout">ออกจากระบบ</button></header>
+<main class="admin-wrap"><div class="section-head"><div><p class="eyebrow">STORE MANAGEMENT</p><h1>Dashboard<span>.</span></h1></div><button class="btn outline" id="reloadAdmin">รีเฟรชข้อมูล</button></div>
+<div id="adminMessage" class="notice">กำลังตรวจสอบสิทธิ์...</div>
+<div id="adminApp" class="hidden">
+<div class="stats"><div class="stat"><small>คำสั่งซื้อทั้งหมด</small><strong id="statOrders">0</strong></div><div class="stat"><small>รอตรวจสอบ</small><strong id="statPending">0</strong></div><div class="stat"><small>สินค้าในร้าน</small><strong id="statProducts">0</strong></div></div>
+<section class="admin-panel"><div class="section-head"><div><p class="eyebrow">INVENTORY</p><h2>จัดการสินค้า</h2></div></div>
+<form id="productForm" class="product-form"><input type="hidden" id="editId"><label>ชื่อสินค้า<input id="pName" required></label><label>ราคา (บาท)<input id="pPrice" type="number" min="1" required></label><label>หมวดหมู่<select id="pCategory"><option value="tops">เสื้อ</option><option value="bottoms">กางเกง</option><option value="dresses">เดรส</option><option value="accessories">กระเป๋า</option></select></label><label>สต็อก<input id="pStock" type="number" min="0" value="10" required></label><label class="span2">URL รูปภาพ<input id="pImage" type="url" placeholder="https://..." required></label><div><button class="btn dark" type="submit" id="saveProduct">บันทึกสินค้า</button> <button class="btn outline" type="button" id="cancelEdit">ล้างฟอร์ม</button></div></form><div id="adminProducts" class="table-wrap"></div></section>
+<section class="admin-panel"><div class="section-head"><div><p class="eyebrow">ORDER MANAGEMENT</p><h2>คำสั่งซื้อ</h2></div></div><div id="adminOrders" class="table-wrap"></div></section>
+</div></main><div id="toast" class="toast"></div></body></html>

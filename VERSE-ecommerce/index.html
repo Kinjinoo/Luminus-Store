@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f7f5f0"><title>VÉRSE — Modern Luxury</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script><script defer src="store.js"></script>
+</head>
+<body>
+<div class="announcement">COMPLIMENTARY SHIPPING ON ORDERS OVER ฿1,500</div>
+<header class="header">
+  <a class="logo" href="#">Luminus<span>.</span></a>
+  <nav><a href="#shop">คอลเลกชัน</a><a href="#story">เรื่องราว</a><a href="#orders">คำสั่งซื้อของฉัน</a></nav>
+  <div class="head-actions"><span id="userLabel" class="muted small">ยังไม่ได้เข้าสู่ระบบ</span><button class="btn outline" id="authOpen">เข้าสู่ระบบ</button><button class="btn dark" id="cartOpen">BAG <b id="cartCount">0</b></button></div>
+</header>
+<main>
+<section class="hero">
+ <div><p class="eyebrow">MODERN LUXURY · EVERYDAY ESSENTIALS</p><h1>Less, but<br><em>better.</em></h1>
+ <p class="lead">ความเรียบง่ายที่มีรายละเอียด<br>คัดสรรชิ้นโปรดสำหรับทุกวันของคุณ</p><a class="btn dark" href="#shop">DISCOVER COLLECTION ↗</a></div>
+ <div class="hero-img"><img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1400&q=85" alt="VÉRSE fashion editorial"></div>
+</section>
+<section class="intro" id="story"><b>Luminus IS A STUDY IN SIMPLICITY.</b><span>เสื้อผ้าที่ดีไม่จำเป็นต้องส่งเสียงดัง<br>เพียงแค่พอดีกับตัวตนของคุณก็เพียงพอ</span></section>
+<section class="shop wrap" id="shop">
+ <div class="section-head"><div><p class="eyebrow">CURATED FOR YOU</p><h2>Shop the collection<span>.</span></h2></div><span class="muted small" id="productCount"></span></div>
+ <div class="toolbar"><div class="filters" id="filters">
+  <button class="filter active" data-cat="all">ทั้งหมด</button><button class="filter" data-cat="tops">เสื้อ</button><button class="filter" data-cat="bottoms">กางเกง</button><button class="filter" data-cat="dresses">เดรส</button><button class="filter" data-cat="accessories">กระเป๋า</button>
+ </div><input id="search" class="search" placeholder="ค้นหาสินค้า..."></div>
+ <div id="products" class="grid"><p>กำลังโหลดสินค้า...</p></div>
+</section>
+<section class="editorial"><img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1500&q=85" alt="Fashion editorial"><div><p class="eyebrow">A QUIETER KIND OF LUXURY</p><h2>Made to be<br><em>lived in.</em></h2></div></section>
+<section class="orders wrap" id="orders"><div class="section-head"><div><p class="eyebrow">YOUR ACCOUNT</p><h2>My orders<span>.</span></h2></div><button class="btn outline" id="refreshOrders">รีเฟรช</button></div><div id="myOrders"><p class="muted">เข้าสู่ระบบเพื่อดูคำสั่งซื้อของคุณ</p></div></section>
+</main>
+<footer><a class="logo" href="#">VÉRSE<span>.</span></a><p>MODERN LUXURY · EVERYDAY ESSENTIALS</p><small>© 2026 VÉRSE. ALL RIGHTS RESERVED.</small></footer>
+
+<div class="shade" id="shade"></div>
+<aside class="drawer" id="cartDrawer"><div class="drawer-head"><div><p class="eyebrow">YOUR SELECTION</p><h2>Shopping bag</h2></div><button class="x" id="cartClose">×</button></div><div id="cartItems" class="cart-items"></div><div class="drawer-foot"><div class="total"><span>ยอดรวมสินค้า</span><b id="cartTotal">฿0</b></div><p class="muted tiny">ค่าจัดส่งคำนวณในขั้นตอนชำระเงิน</p><button class="btn dark wide" id="checkoutOpen">ดำเนินการชำระเงิน →</button></div></aside>
+
+<div class="modal" id="authModal"><div class="modal-card narrow"><button class="x modal-x" data-close="authModal">×</button><p class="eyebrow">WELCOME TO VÉRSE</p><h2 id="authTitle">เข้าสู่ระบบ</h2><form id="authForm">
+<label>อีเมล<input type="email" id="authEmail" required autocomplete="email"></label><label>รหัสผ่าน<input type="password" id="authPassword" required minlength="6" autocomplete="current-password"></label>
+<label id="nameWrap" class="hidden">ชื่อที่ใช้แสดง<input id="authName" autocomplete="name"></label>
+<button class="btn dark wide" id="authSubmit">เข้าสู่ระบบ</button></form>
+<p class="switch-auth"><span id="authSwitchText">ยังไม่มีบัญชี?</span> <button id="authSwitch">สมัครสมาชิก</button></p><button class="text-button hidden" id="signOut">ออกจากระบบ</button></div></div>
+
+<div class="modal" id="checkoutModal"><div class="modal-card checkout-card"><button class="x modal-x" data-close="checkoutModal">×</button><p class="eyebrow">ALMOST YOURS</p><h2>Checkout</h2><div class="checkout-grid"><form id="checkoutForm">
+<label>ชื่อผู้รับ<input name="name" required autocomplete="name"></label><label>เบอร์โทรศัพท์<input name="phone" type="tel" required pattern="[0-9+() -]{9,15}" autocomplete="tel"></label><label>อีเมล<input name="email" type="email" autocomplete="email"></label><label>ที่อยู่จัดส่ง<textarea name="address" rows="3" required></textarea></label>
+<div class="bank"><small>โอนเงินผ่านธนาคาร</small><b id="bankName"></b><strong id="bankAccount"></strong><span id="bankOwner"></span><button type="button" class="text-button" id="copyBank">คัดลอกเลขบัญชี</button></div>
+<label>แนบสลิปโอนเงิน (จำเป็น)<input type="file" id="slip" accept="image/png,image/jpeg,image/webp" required></label><div id="slipName" class="muted tiny">ยังไม่ได้เลือกไฟล์</div>
+<label class="check"><input type="checkbox" required> ยืนยันว่าข้อมูลถูกต้องและได้โอนเงินแล้ว</label><button class="btn dark wide" type="submit" id="placeOrder">ยืนยันคำสั่งซื้อ</button>
+</form><aside class="summary"><h3>สรุปรายการ</h3><div id="checkoutLines"></div><div class="total"><span>สินค้า</span><b id="sumSubtotal"></b></div><div class="total"><span>จัดส่ง</span><b id="sumShipping"></b></div><div class="total grand"><span>ยอดชำระ</span><b id="sumTotal"></b></div></aside></div></div></div>
+<div id="toast" class="toast" role="status"></div>
+</body></html>
