@@ -11,7 +11,7 @@ function openModal(id){$("#"+id).classList.add("show")}
 function closeModal(id){$("#"+id).classList.remove("show")}
 document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>closeModal(b.dataset.close)));
 async function init(){
- $("#bankName").textContent=C.BANK_NAME;$("#bankAccount").textContent=C.BANK_ACCOUNT;$("#bankOwner").textContent=C.BANK_OWNER;
+ if($("#bankName"))$("#bankName").textContent=C.BANK_NAME;if($("#bankAccount"))$("#bankAccount").textContent=C.BANK_ACCOUNT;if($("#bankOwner"))$("#bankOwner").textContent=C.BANK_OWNER;
  if(!db){$("#products").innerHTML='<p class="notice">กรุณาตั้งค่า Supabase URL และ Key ในไฟล์ config.js ก่อน เว็บไซต์จึงจะโหลดสินค้าและใช้งานระบบสมาชิกได้</p>';return}
  const {data:{session}}=await db.auth.getSession();user=session?.user||null;await updateAuth();
  db.auth.onAuthStateChange((_e,s)=>{user=s?.user||null;setTimeout(async()=>{await updateAuth();},0)});
@@ -57,18 +57,14 @@ $("#authForm").addEventListener("submit",async e=>{
   const email=$("#authEmail").value.trim(),password=$("#authPassword").value;
   const isSignup=e.currentTarget.dataset.mode==="signup";
   const res=isSignup?await db.auth.signUp({email,password,options:{data:{full_name:$("#authName").value.trim()}}}):await db.auth.signInWithPassword({email,password});
-  if(res.error)return toast(res.error.message);
-  closeModal("authModal");
-  e.target.reset();
-  window.scrollTo({top:0,behavior:"smooth"});
-  toast(isSignup?"สมัครสมาชิกสำเร็จ":"เข้าสู่ระบบสำเร็จ");
+  if(res.error)return toast(res.error.message);currentUser=res.data?.user||null;await renderAuth();closeAuth();toast(isSignup?"สมัครสมาชิกสำเร็จ":"เข้าสู่ระบบแล้ว");
  }finally{btn.disabled=false;btn.textContent=oldText;}
 });
 $("#signOut").onclick=async()=>{await db.auth.signOut();closeModal("authModal");toast("ออกจากระบบแล้ว")};
 $("#checkoutOpen").onclick=()=>{if(!cart.length)return toast("กรุณาเลือกสินค้าก่อน");if(!user){showCart(false);authMode(false);$("#authForm").classList.remove("hidden");openModal("authModal");return toast("กรุณาเข้าสู่ระบบก่อนสั่งซื้อ")}showCart(false);renderSummary();openModal("checkoutModal")};
 function renderSummary(){const sub=cart.reduce((s,x)=>s+x.price*x.qty,0),ship=sub>=C.FREE_SHIPPING_AT?0:C.SHIPPING_FEE;$("#checkoutLines").innerHTML=cart.map(x=>`<p class="summary-line">${esc(x.name)} × ${x.qty}<b>${money(x.price*x.qty)}</b></p>`).join("");$("#sumSubtotal").textContent=money(sub);$("#sumShipping").textContent=ship?money(ship):"ฟรี";$("#sumTotal").textContent=money(sub+ship)}
 $("#slip").onchange=()=>{$("#slipName").textContent=$("#slip").files[0]?.name||"ยังไม่ได้เลือกไฟล์"};
-$("#copyBank").onclick=async()=>{try{await navigator.clipboard.writeText(C.BANK_ACCOUNT);toast("คัดลอกเลขบัญชีแล้ว")}catch{toast("กรุณาคัดลอกเลขบัญชีด้วยตนเอง")}};
+if($("#copyBank"))$("#copyBank").onclick=async()=>{try{await navigator.clipboard.writeText(C.BANK_ACCOUNT);toast("คัดลอกเลขบัญชีแล้ว")}catch{toast("กรุณาคัดลอกเลขบัญชีด้วยตนเอง")}};
 $("#checkoutForm").addEventListener("submit",async e=>{
  e.preventDefault();if(!user)return toast("กรุณาเข้าสู่ระบบ");const file=$("#slip").files[0];if(!file||!file.type.startsWith("image/")||file.size>5*1024*1024)return toast("กรุณาแนบรูปสลิปไม่เกิน 5 MB");
  const btn=$("#placeOrder");btn.disabled=true;btn.textContent="กำลังบันทึกคำสั่งซื้อ...";
