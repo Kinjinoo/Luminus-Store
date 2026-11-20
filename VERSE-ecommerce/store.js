@@ -61,7 +61,8 @@ $("#checkoutForm").addEventListener("submit",async e=>{
  e.preventDefault();if(!user)return toast("กรุณาเข้าสู่ระบบ");const file=$("#slip").files[0];if(!file||!file.type.startsWith("image/")||file.size>5*1024*1024)return toast("กรุณาแนบรูปสลิปไม่เกิน 5 MB");
  const btn=$("#placeOrder");btn.disabled=true;btn.textContent="กำลังบันทึกคำสั่งซื้อ...";
  try{
-  const orderId=crypto.randomUUID(),path=`${user.id}/${orderId}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,"_")}`;
+  const ext=(file.name.split(".").pop()||"jpg").replace(/[^a-zA-Z0-9]/g,"")||"jpg";
+  const orderId=crypto.randomUUID(),path=`${user.id}/${orderId}/${Date.now()}.${ext}`;
   const up=await db.storage.from("payment-slips").upload(path,file,{contentType:file.type,upsert:false});if(up.error)throw up.error;
   const payload=cart.map(x=>({product_id:x.id,quantity:x.qty}));
   const placed=await db.rpc("place_verse_order",{p_order_id:orderId,p_items:payload,p_slip_path:path,p_customer_name:e.target.name.value,p_phone:e.target.phone.value,p_email:e.target.email.value,p_address:e.target.address.value});
