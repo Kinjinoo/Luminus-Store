@@ -57,7 +57,7 @@ $("#authForm").addEventListener("submit",async e=>{
   const email=$("#authEmail").value.trim(),password=$("#authPassword").value;
   const isSignup=e.currentTarget.dataset.mode==="signup";
   const res=isSignup?await db.auth.signUp({email,password,options:{data:{full_name:$("#authName").value.trim()}}}):await db.auth.signInWithPassword({email,password});
-  if(res.error)return toast(res.error.message);currentUser=res.data?.user||null;await renderAuth();closeAuth();toast(isSignup?"สมัครสมาชิกสำเร็จ":"เข้าสู่ระบบแล้ว");
+ if(res.error)return toast(res.error.message);user=res.data?.user||null;await updateAuth();closeModal("authModal");toast(isSignup?"สมัครสมาชิกสำเร็จ":"เข้าสู่ระบบแล้ว");
  }finally{btn.disabled=false;btn.textContent=oldText;}
 });
 $("#signOut").onclick=async()=>{await db.auth.signOut();closeModal("authModal");toast("ออกจากระบบแล้ว")};
