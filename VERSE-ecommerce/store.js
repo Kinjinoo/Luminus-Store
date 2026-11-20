@@ -49,9 +49,21 @@ $("#cartOpen").onclick=()=>showCart(true);$("#cartClose").onclick=()=>showCart(f
 function authMode(signup){$("#authTitle").textContent=signup?"สมัครสมาชิก":"เข้าสู่ระบบ";$("#authSubmit").textContent=signup?"สร้างบัญชี":"เข้าสู่ระบบ";$("#nameWrap").classList.toggle("hidden",!signup);$("#authSwitchText").textContent=signup?"มีบัญชีแล้ว?":"ยังไม่มีบัญชี?";$("#authSwitch").textContent=signup?"เข้าสู่ระบบ":"สมัครสมาชิก";$("#authForm").dataset.mode=signup?"signup":"login";$("#authPassword").autocomplete=signup?"new-password":"current-password"}
 $("#authOpen").onclick=()=>{if(user){openModal("authModal");$("#authForm").classList.add("hidden");$("#authTitle").textContent="บัญชีของฉัน";$("#signOut").classList.remove("hidden")}else{authMode(false);$("#authForm").classList.remove("hidden");openModal("authModal")}};
 $("#authSwitch").onclick=()=>{authMode($("#authForm").dataset.mode!=="signup")};
-$("#authForm").addEventListener("submit",async e=>{e.preventDefault();if (!db) {
-   return toast("กรุณาตั้งค่า Supabase ใน config.js ก่อน");
- }const email=$("#authEmail").value,password=$("#authPassword").value;let res;if(e.currentTarget.dataset.mode==="signup")res=await db.auth.signUp({email,password,options:{data:{full_name:$("#authName").value}}});else res=await db.auth.signInWithPassword({email,password});if(res.error)return toast(res.error.message);toast(e.currentTarget.dataset.mode==="signup"?"สมัครสมาชิกสำเร็จ":"เข้าสู่ระบบสำเร็จ");closeModal("authModal");});
+$("#authForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const btn=$("#authSubmit"),oldText=btn.textContent;
+ btn.disabled=true;btn.textContent="กำลังดำเนินการ...";
+ try{
+  const email=$("#authEmail").value.trim(),password=$("#authPassword").value;
+  const isSignup=e.currentTarget.dataset.mode==="signup";
+  const res=isSignup?await db.auth.signUp({email,password,options:{data:{full_name:$("#authName").value.trim()}}}):await db.auth.signInWithPassword({email,password});
+  if(res.error)return toast(res.error.message);
+  closeModal("authModal");
+  e.target.reset();
+  window.scrollTo({top:0,behavior:"smooth"});
+  toast(isSignup?"สมัครสมาชิกสำเร็จ":"เข้าสู่ระบบสำเร็จ");
+ }finally{btn.disabled=false;btn.textContent=oldText;}
+});
 $("#signOut").onclick=async()=>{await db.auth.signOut();closeModal("authModal");toast("ออกจากระบบแล้ว")};
 $("#checkoutOpen").onclick=()=>{if(!cart.length)return toast("กรุณาเลือกสินค้าก่อน");if(!user){showCart(false);authMode(false);$("#authForm").classList.remove("hidden");openModal("authModal");return toast("กรุณาเข้าสู่ระบบก่อนสั่งซื้อ")}showCart(false);renderSummary();openModal("checkoutModal")};
 function renderSummary(){const sub=cart.reduce((s,x)=>s+x.price*x.qty,0),ship=sub>=C.FREE_SHIPPING_AT?0:C.SHIPPING_FEE;$("#checkoutLines").innerHTML=cart.map(x=>`<p class="summary-line">${esc(x.name)} × ${x.qty}<b>${money(x.price*x.qty)}</b></p>`).join("");$("#sumSubtotal").textContent=money(sub);$("#sumShipping").textContent=ship?money(ship):"ฟรี";$("#sumTotal").textContent=money(sub+ship)}
