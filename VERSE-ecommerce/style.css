@@ -1231,3 +1231,29 @@ th {
         font-size: 30px;
     }
 }
+/* === GEN Z MODERN EDITORIAL TYPOGRAPHY === */
+body, input, select, textarea, button {
+  font-family: 'Space Grotesk', 'Anuphan', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  letter-spacing: -0.01em;
+}
+
+/* หัวข้อใหญ่ และชื่อแบรนด์ VÉRSE ให้ดูเท่มีเอกลักษณ์ */
+h1, h2, h3, .brand, .logo {
+  font-family: 'Syne', 'Anuphan', sans-serif !important;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* ป้ายกำกับตัวพิมพ์เล็กด้านบน (Eyebrow) และปุ่มหมวดหมู่ */
+.eyebrow, .tag, .filter, .quick-add {
+  font-family: 'Space Grotesk', 'Anuphan', sans-serif !important;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+}
+
+/* ตัวเลขราคาให้คมชัดและจัดเรียงตรงกัน */
+.product-meta b, #cartTotal, #sumTotal {
+  font-family: 'Space Grotesk', sans-serif !important;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
