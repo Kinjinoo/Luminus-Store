@@ -12,6 +12,18 @@ function closeModal(id){$("#"+id).classList.remove("show")}
 document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>closeModal(b.dataset.close)));
 function splitOpts(str){return String(str||"").split(",").map(s=>s.trim()).filter(Boolean)}
 
+function getProductOptions(p){
+ if(!p || p.category==="accessories") return {colors:[], sizes:[]};
+ const cols = splitOpts(p.colors);
+ const szs = splitOpts(p.sizes);
+ const defaultCols = ["ดำ", "ขาว", "ครีม"];
+ const defaultSzs = p.category==="shoes" ? ["38", "39", "40", "41", "42", "43"] : ["S", "M", "L", "XL"];
+ return {
+  colors: cols.length ? cols : defaultCols,
+  sizes: szs.length ? szs : defaultSzs
+ };
+}
+
 async function init(){
  if($("#bankName"))$("#bankName").textContent=C.BANK_NAME;if($("#bankAccount"))$("#bankAccount").textContent=C.BANK_ACCOUNT;if($("#bankOwner"))$("#bankOwner").textContent=C.BANK_OWNER;
  if(!db){$("#products").innerHTML='<p class="notice">กรุณาตั้งค่า Supabase URL และ Key ในไฟล์ config.js ก่อน</p>';return}
@@ -26,21 +38,19 @@ async function updateAuth(){
  if(user) await loadOrders();
 }
 async function loadProducts(){
- const {data,error}=await db.from("products").select("id,name,description,price,category,image_url,stock,active,colors,sizes").eq("active",true).order("created_at",{ascending:false});
+ const {data,error}=await db.from("products").select("*").eq("active",true).order("created_at",{ascending:false});
  if(error){$("#products").innerHTML=`<p class="notice">${esc(error.message)}</p>`;return}
- products=data||[];applyFilters();
+ products=data||[];applyFilters();renderCart();
 }
 function applyFilters(){
  const q=$("#search").value.trim().toLowerCase();
  const rows=products.filter(p=>(category==="all"||p.category===category)&&p.name.toLowerCase().includes(q));
  $("#productCount").textContent=`${rows.length} PIECES`;
  $("#products").innerHTML=rows.length?rows.map(p=>{
-  const isBag=p.category==="accessories";
-  const cols=isBag?[]:splitOpts(p.colors);
-  const szs=isBag?[]:splitOpts(p.sizes);
-  const optHtml=(cols.length||szs.length)?`<div style="display:flex;gap:6px;margin-top:6px">
-    ${cols.length?`<select data-opt-color="${p.id}" style="padding:3px 6px;font-size:12px;border:1px solid #ddd;border-radius:4px;background:#fff">${cols.map(c=>`<option value="${esc(c)}">สี: ${esc(c)}</option>`).join("")}</select>`:""}
-    ${szs.length?`<select data-opt-size="${p.id}" style="padding:3px 6px;font-size:12px;border:1px solid #ddd;border-radius:4px;background:#fff">${szs.map(s=>`<option value="${esc(s)}">ไซส์: ${esc(s)}</option>`).join("")}</select>`:""}
+  const {colors:cols, sizes:szs}=getProductOptions(p);
+  const optHtml=(cols.length||szs.length)?`<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">
+    ${cols.length?`<select data-opt-color="${p.id}" style="padding:4px 8px;font-size:12px;border:1px solid #d6d0c4;border-radius:4px;background:#fff;cursor:pointer">${cols.map(c=>`<option value="${esc(c)}">สี: ${esc(c)}</option>`).join("")}</select>`:""}
+    ${szs.length?`<select data-opt-size="${p.id}" style="padding:4px 8px;font-size:12px;border:1px solid #d6d0c4;border-radius:4px;background:#fff;cursor:pointer">${szs.map(s=>`<option value="${esc(s)}">ไซส์: ${esc(s)}</option>`).join("")}</select>`:""}
   </div>`:"";
   return `<article class="product-card"><div class="product-photo"><img src="${esc(p.image_url)}" alt="${esc(p.name)}" loading="lazy"><span class="tag">${p.stock>0?"IN STOCK":"SOLD OUT"}</span><button class="quick-add" data-add="${p.id}" ${p.stock<1?"disabled":""}>${p.stock>0?"ADD TO BAG +":"SOLD OUT"}</button></div><div class="product-meta"><span>${esc(p.name)}</span><b>${money(p.price)}</b></div><p class="muted tiny">${esc(p.category.toUpperCase())} · เหลือ ${p.stock}</p>${optHtml}</article>`;
  }).join(""):'<p class="muted">ไม่พบสินค้า</p>';
@@ -51,8 +61,9 @@ $("#products").addEventListener("click",e=>{const b=e.target.closest("[data-add]
 
 function addCart(id){
  const p=products.find(x=>x.id===id);if(!p||p.stock<1)return toast("สินค้าหมด");
- const color=$(`[data-opt-color="${id}"]`)?.value||"";
- const size=$(`[data-opt-size="${id}"]`)?.value||"";
+ const {colors:cols, sizes:szs}=getProductOptions(p);
+ const color=$(`[data-opt-color="${id}"]`)?.value || cols[0] || "";
+ const size=$(`[data-opt-size="${id}"]`)?.value || szs[0] || "";
  const key=`${id}__${color}__${size}`;
  const totalInCart=cart.filter(x=>x.id===id).reduce((s,x)=>s+x.qty,0);
  if(totalInCart>=p.stock)return toast("สินค้าในสต็อกไม่เพียงพอ");
@@ -65,17 +76,29 @@ function saveCart(){localStorage.setItem("verse-cart",JSON.stringify(cart));rend
 function renderCart(){
  $("#cartCount").textContent=cart.reduce((s,x)=>s+x.qty,0);
  $("#cartItems").innerHTML=cart.length?cart.map((x,idx)=>{
-  const meta=[x.color?`สี: ${esc(x.color)}`:"",x.size?`ไซส์: ${esc(x.size)}`:""].filter(Boolean).join(" · ");
-  return `<div class="cart-line"><img src="${esc(x.image_url)}" alt=""><div><h4>${esc(x.name)}</h4>${meta?`<small class="muted">${meta}</small>`:""}<p>${money(x.price)}</p><div class="qty"><button data-q="-1" data-idx="${idx}">−</button> ${x.qty} <button data-q="1" data-idx="${idx}">+</button></div><button class="remove" data-r="${idx}">ลบ</button></div></div>`;
+  const p=products.find(i=>i.id===x.id);
+  const {colors:cols, sizes:szs}=getProductOptions(p);
+  if(cols.length && !x.color) x.color=cols[0];
+  if(szs.length && !x.size) x.size=szs[0];
+  const cartOptHtml=(cols.length||szs.length)?`<div style="display:flex;gap:4px;margin:4px 0">
+    ${cols.length?`<select data-cart-color="${idx}" style="padding:2px 6px;font-size:12px;border:1px solid #d6d0c4;border-radius:4px;background:#fff">${cols.map(c=>`<option value="${esc(c)}" ${x.color===c?"selected":""}>สี: ${esc(c)}</option>`).join("")}</select>`:""}
+    ${szs.length?`<select data-cart-size="${idx}" style="padding:2px 6px;font-size:12px;border:1px solid #d6d0c4;border-radius:4px;background:#fff">${szs.map(s=>`<option value="${esc(s)}" ${x.size===s?"selected":""}>ไซส์: ${esc(s)}</option>`).join("")}</select>`:""}
+  </div>`:"";
+  return `<div class="cart-line"><img src="${esc(x.image_url)}" alt=""><div><h4>${esc(x.name)}</h4>${cartOptHtml}<p>${money(x.price)}</p><div class="qty"><button data-q="-1" data-idx="${idx}">−</button> ${x.qty} <button data-q="1" data-idx="${idx}">+</button></div><button class="remove" data-r="${idx}">ลบ</button></div></div>`;
  }).join(""):'<p class="empty">ยังไม่มีสินค้าในตะกร้า</p>';
  $("#cartTotal").textContent=money(cart.reduce((s,x)=>s+x.price*x.qty,0));
 }
+$("#cartItems").addEventListener("change",e=>{
+ const cSel=e.target.closest("[data-cart-color]"),sSel=e.target.closest("[data-cart-size]");
+ if(cSel){const idx=Number(cSel.dataset.cartColor);cart[idx].color=cSel.value;cart[idx].key=`${cart[idx].id}__${cart[idx].color}__${cart[idx].size}`;saveCart();}
+ if(sSel){const idx=Number(sSel.dataset.cartSize);cart[idx].size=sSel.value;cart[idx].key=`${cart[idx].id}__${cart[idx].color}__${cart[idx].size}`;saveCart();}
+});
 $("#cartItems").addEventListener("click",e=>{
  const q=e.target.closest("[data-q]"),r=e.target.closest("[data-r]");
  if(q){
   const idx=Number(q.dataset.idx),x=cart[idx],p=products.find(i=>i.id===x.id);
   const delta=Number(q.dataset.q);
-  if(delta>0){const totalInCart=cart.filter(i=>i.id===x.id).reduce((s,i)=>s+i.qty,0);if(totalInCart>=p.stock)return toast("จำนวนเกินสต็อก")}
+  if(delta>0){const totalInCart=cart.filter(i=>i.id===x.id).reduce((s,i)=>s+i.qty,0);if(p&&totalInCart>=p.stock)return toast("จำนวนเกินสต็อก")}
   x.qty+=delta;if(x.qty<=0)cart.splice(idx,1);saveCart();
  }
  if(r){cart.splice(Number(r.dataset.r),1);saveCart()}
@@ -130,9 +153,7 @@ async function loadOrders(){
   const canEdit=o.status==="รอตรวจสอบสลิป";
   const itemsHtml=(o.order_items||[]).map(i=>{
    const prod=products.find(p=>p.id===i.product_id);
-   const isBag=prod?.category==="accessories";
-   const cols=isBag?[]:splitOpts(prod?.colors);
-   const szs=isBag?[]:splitOpts(prod?.sizes);
+   const {colors:cols, sizes:szs}=getProductOptions(prod);
    const optText=[i.color?`สี: ${esc(i.color)}`:"",i.size?`ไซส์: ${esc(i.size)}`:""].filter(Boolean).join(" · ");
    const editControl=(canEdit&&(cols.length||szs.length))?`<div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:4px;align-items:center">
      ${cols.length?`<select data-edit-color="${i.id}" style="padding:2px 4px;font-size:12px">${cols.map(c=>`<option value="${esc(c)}" ${i.color===c?"selected":""}>สี: ${esc(c)}</option>`).join("")}</select>`:""}
