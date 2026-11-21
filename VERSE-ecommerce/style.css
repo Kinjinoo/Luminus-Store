@@ -1257,3 +1257,78 @@ h1, h2, h3, .brand, .logo {
   font-weight: 700;
   letter-spacing: -0.02em;
 }
+/* === MODERN KOREAN EDITORIAL THEME (SEONGSU MINIMAL) === */
+:root {
+  --kr-bg: #f8f7f4;
+  --kr-card: #ffffff;
+  --kr-ink: #141413;
+  --kr-muted: #76746e;
+  --kr-border: rgba(20, 20, 19, 0.08);
+  --kr-accent: #141413;
+}
+
+/* พื้นหลังหลักไล่เฉดนุ่มๆ สไตล์แกลเลอรีเกาหลี (Warm Alabaster + Soft Glow) */
+body {
+  background-color: var(--kr-bg) !important;
+  background-image: 
+    radial-gradient(at 12% 8%, rgba(232, 224, 213, 0.65) 0px, transparent 50%),
+    radial-gradient(at 88% 18%, rgba(223, 229, 236, 0.55) 0px, transparent 48%),
+    radial-gradient(at 50% 90%, rgba(237, 231, 222, 0.5) 0px, transparent 55%) !important;
+  background-attachment: fixed !important;
+  color: var(--kr-ink) !important;
+}
+
+/* แถบเมนูด้านบนแบบกระจกฝ้าโปร่งแสง (Frosted Glass Header) */
+header, .topbar, nav {
+  background: rgba(248, 247, 244, 0.78) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border-bottom: 1px solid var(--kr-border) !important;
+}
+
+/* โซน Hero / แบนเนอร์ด้านบนให้ดูคลีนและมีมิติ */
+.hero {
+  background: linear-gradient(135deg, rgba(255,255,255,0.75) 0%, rgba(242,239,233,0.6) 100%) !important;
+  border: 1px solid var(--kr-border) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 12px 40px rgba(20, 20, 19, 0.04) !important;
+}
+
+/* การ์ดสินค้าสไตล์เกาหลี: ขอบโค้งมนละมุน พื้นขาวสะอาด เงาบางเบา */
+.product-card {
+  background: var(--kr-card) !important;
+  border: 1px solid var(--kr-border) !important;
+  border-radius: 16px !important;
+  padding: 12px !important;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s ease !important;
+}
+
+.product-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 16px 36px rgba(20, 20, 19, 0.08) !important;
+}
+
+.product-photo {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  background: #f1efe9 !important;
+}
+
+/* ปุ่มหมวดหมู่และปุ่มหลักให้ดูโมเดิร์นแบบ Pill Shape */
+.filter {
+  border-radius: 999px !important;
+  border: 1px solid var(--kr-border) !important;
+  background: rgba(255, 255, 255, 0.7) !important;
+  transition: all 0.2s ease !important;
+}
+
+.filter.active, .filter:hover {
+  background: var(--kr-ink) !important;
+  color: #ffffff !important;
+  border-color: var(--kr-ink) !important;
+}
+
+.quick-add {
+  border-radius: 999px !important;
+  backdrop-filter: blur(8px) !important;
+}
