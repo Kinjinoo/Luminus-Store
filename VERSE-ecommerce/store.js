@@ -7,8 +7,8 @@ const db = configured ? window.supabase.createClient(C.SUPABASE_URL, C.SUPABASE_
 let user = null, products = [], cart = JSON.parse(localStorage.getItem("verse-cart") || "[]"), category = "all", toastTimer;
 function toast(s){const t=$("#toast");t.textContent=s;t.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("show"),2800)}
 function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function openModal(id){$("#"+id).classList.add("show")}
-function closeModal(id){$("#"+id).classList.remove("show")}
+function openModal(id){const el=$("#"+id);if(el)el.classList.add("show")}
+function closeModal(id){const el=$("#"+id);if(el)el.classList.remove("show")}
 document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>closeModal(b.dataset.close)));
 function splitOpts(str){return String(str||"").split(",").map(s=>s.trim()).filter(Boolean)}
 
@@ -16,67 +16,70 @@ function getProductOptions(p){
  if(!p || p.category==="accessories") return {colors:[], sizes:[]};
  const cols = splitOpts(p.colors);
  const szs = splitOpts(p.sizes);
- const defaultCols = ["ดำ", "ขาว", "ครีม", "เขียว", "แดง", "น้ำตาล"];
- const defaultSzs = p.category==="shoes" ? ["38", "39", "40", "41", "42", "43", "44"] : ["S", "M", "L", "XL", "2XL"];
+ const defaultCols = ["ดำ", "ขาว", "ครีม"];
+ const defaultSzs = p.category==="shoes" ? ["38", "39", "40", "41", "42", "43"] : ["S", "M", "L", "XL"];
  return {
   colors: cols.length ? cols : defaultCols,
   sizes: szs.length ? szs : defaultSzs
  };
- const SIZE_CHARTS = {
-  tops: {
-    title: "ตารางไซส์เสื้อ (Tops) — หน่วย: นิ้ว",
-    headers: ["ไซส์", "รอบอก", "ความยาวเสื้อ", "ไหล่กว้าง"],
-    rows: [
-      ["S", "36 - 38", "25", "16.5"],
-      ["M", "38 - 40", "26", "17.5"],
-      ["L", "40 - 42", "27", "18.5"],
-      ["XL", "42 - 44", "28", "19.5"]
-    ]
-  },
-  bottoms: {
-    title: "ตารางไซส์กางเกง (Bottoms) — หน่วย: นิ้ว",
-    headers: ["ไซส์", "รอบเอว", "สะโพก", "ความยาวกางเกง"],
-    rows: [
-      ["S", "26 - 28", "36", "38"],
-      ["M", "28 - 30", "38", "39"],
-      ["L", "30 - 32", "40", "40"],
-      ["XL", "32 - 34", "42", "41"]
-    ]
-  },
-  dresses: {
-    title: "ตารางไซส์เดรส (Dresses) — หน่วย: นิ้ว",
-    headers: ["ไซส์", "รอบอก", "รอบเอว", "สะโพก", "ความยาวชุด"],
-    rows: [
-      ["S", "32 - 34", "26 - 27", "36", "42"],
-      ["M", "34 - 36", "28 - 29", "38", "43"],
-      ["L", "36 - 38", "30 - 31", "40", "44"],
-      ["XL", "38 - 40", "32 - 33", "42", "45"]
-    ]
-  },
-  shoes: {
-    title: "ตารางไซส์รองเท้า (Shoes) — หน่วย: เซนติเมตร",
-    headers: ["ไซส์ (EU)", "ความยาวเท้า (ซม.)", "เทียบไซส์ US"],
-    rows: [
-      ["38", "24.0 ซม.", "US 6"],
-      ["39", "24.5 ซม.", "US 6.5"],
-      ["40", "25.0 ซม.", "US 7"],
-      ["41", "25.5 ซม.", "US 8"],
-      ["42", "26.0 ซม.", "US 8.5"],
-      ["43", "26.5 ซม.", "US 9.5"]
-    ]
-  }
+}
+
+const SIZE_CHARTS = {
+ tops: {
+  title: "ตารางไซส์เสื้อ (Tops) — หน่วย: นิ้ว",
+  headers: ["ไซส์", "รอบอก", "ความยาวเสื้อ", "ไหล่กว้าง"],
+  rows: [
+   ["S", "36 - 38", "25", "16.5"],
+   ["M", "38 - 40", "26", "17.5"],
+   ["L", "40 - 42", "27", "18.5"],
+   ["XL", "42 - 44", "28", "19.5"]
+  ]
+ },
+ bottoms: {
+  title: "ตารางไซส์กางเกง (Bottoms) — หน่วย: นิ้ว",
+  headers: ["ไซส์", "รอบเอว", "สะโพก", "ความยาวกางเกง"],
+  rows: [
+   ["S", "26 - 28", "36", "38"],
+   ["M", "28 - 30", "38", "39"],
+   ["L", "30 - 32", "40", "40"],
+   ["XL", "32 - 34", "42", "41"]
+  ]
+ },
+ dresses: {
+  title: "ตารางไซส์เดรส (Dresses) — หน่วย: นิ้ว",
+  headers: ["ไซส์", "รอบอก", "รอบเอว", "สะโพก", "ความยาวชุด"],
+  rows: [
+   ["S", "32 - 34", "26 - 27", "36", "42"],
+   ["M", "34 - 36", "28 - 29", "38", "43"],
+   ["L", "36 - 38", "30 - 31", "40", "44"],
+   ["XL", "38 - 40", "32 - 33", "42", "45"]
+  ]
+ },
+ shoes: {
+  title: "ตารางไซส์รองเท้า (Shoes) — หน่วย: เซนติเมตร",
+  headers: ["ไซส์ (EU)", "ความยาวเท้า (ซม.)", "เทียบไซส์ US"],
+  rows: [
+   ["38", "24.0 ซม.", "US 6"],
+   ["39", "24.5 ซม.", "US 6.5"],
+   ["40", "25.0 ซม.", "US 7"],
+   ["41", "25.5 ซม.", "US 8"],
+   ["42", "26.0 ซม.", "US 8.5"],
+   ["43", "26.5 ซม.", "US 9.5"]
+  ]
+ }
 };
 
 function openSizeChart(cat){
-  const chart = SIZE_CHARTS[cat] || SIZE_CHARTS.tops;
-  $("#sizeChartContent").innerHTML = `
-    <p style="font-weight:600;margin-bottom:8px;font-size:14px">${chart.title}</p>
-    <table>
-      <thead><tr>${chart.headers.map(h=>`<th>${h}</th>`).join("")}</tr></thead>
-      <tbody>${chart.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody>
-    </table>`;
-  openModal("sizeModal");
-}
+ const chart = SIZE_CHARTS[cat] || SIZE_CHARTS.tops;
+ const box = $("#sizeChartContent");
+ if(!box) return;
+ box.innerHTML = `
+  <p style="font-weight:600;margin-bottom:8px;font-size:14px">${chart.title}</p>
+  <table>
+   <thead><tr>${chart.headers.map(h=>`<th>${h}</th>`).join("")}</tr></thead>
+   <tbody>${chart.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody>
+  </table>`;
+ openModal("sizeModal");
 }
 
 async function init(){
@@ -108,21 +111,18 @@ function applyFilters(){
     ${szs.length?`<select data-opt-size="${p.id}" style="padding:4px 8px;font-size:12px;border:1px solid #d6d0c4;border-radius:4px;background:#fff;cursor:pointer">${szs.map(s=>`<option value="${esc(s)}">ไซส์: ${esc(s)}</option>`).join("")}</select>`:""}
     <button type="button" class="text-button" data-size-guide="${p.category}" style="font-size:12px">📏 ตารางไซส์</button>
   </div>`:"";
-  const optHtml=(cols.length||szs.length)?`<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">
-    ${cols.length?`<select data-opt-color="${p.id}" style="padding:4px 8px;font-size:12px;border:1px solid #d6d0c4;border-radius:4px;background:#fff;cursor:pointer">${cols.map(c=>`<option value="${esc(c)}">สี: ${esc(c)}</option>`).join("")}</select>`:""}
-    ${szs.length?`<select data-opt-size="${p.id}" style="padding:4px 8px;font-size:12px;border:1px solid #d6d0c4;border-radius:4px;background:#fff;cursor:pointer">${szs.map(s=>`<option value="${esc(s)}">ไซส์: ${esc(s)}</option>`).join("")}</select>`:""}
-  </div>`:"";
   return `<article class="product-card"><div class="product-photo"><img src="${esc(p.image_url)}" alt="${esc(p.name)}" loading="lazy"><span class="tag">${p.stock>0?"IN STOCK":"SOLD OUT"}</span><button class="quick-add" data-add="${p.id}" ${p.stock<1?"disabled":""}>${p.stock>0?"ADD TO BAG +":"SOLD OUT"}</button></div><div class="product-meta"><span>${esc(p.name)}</span><b>${money(p.price)}</b></div><p class="muted tiny">${esc(p.category.toUpperCase())} · เหลือ ${p.stock}</p>${optHtml}</article>`;
  }).join(""):'<p class="muted">ไม่พบสินค้า</p>';
 }
 $("#filters").addEventListener("click",e=>{const b=e.target.closest("[data-cat]");if(!b)return;category=b.dataset.cat;document.querySelectorAll(".filter").forEach(x=>x.classList.toggle("active",x===b));applyFilters()});
 $("#search").addEventListener("input",applyFilters);
 $("#products").addEventListener("click",e=>{
-  const sg=e.target.closest("[data-size-guide]");
-  if(sg)return openSizeChart(sg.dataset.sizeGuide);
-  const b=e.target.closest("[data-add]");
-  if(b)addCart(Number(b.dataset.add));
+ const sg=e.target.closest("[data-size-guide]");
+ if(sg)return openSizeChart(sg.dataset.sizeGuide);
+ const b=e.target.closest("[data-add]");
+ if(b)addCart(Number(b.dataset.add));
 });
+
 function addCart(id){
  const p=products.find(x=>x.id===id);if(!p||p.stock<1)return toast("สินค้าหมด");
  const {colors:cols, sizes:szs}=getProductOptions(p);
