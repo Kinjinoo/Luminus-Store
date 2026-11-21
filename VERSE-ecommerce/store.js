@@ -16,8 +16,8 @@ function getProductOptions(p){
  if(!p || p.category==="accessories") return {colors:[], sizes:[]};
  const cols = splitOpts(p.colors);
  const szs = splitOpts(p.sizes);
- const defaultCols = ["ดำ", "ขาว", "ครีม"];
- const defaultSzs = p.category==="shoes" ? ["38", "39", "40", "41", "42", "43"] : ["S", "M", "L", "XL"];
+ const defaultCols = ["ดำ", "ขาว", "ครีม", "เขียว", "แดง", "น้ำตาล"];
+ const defaultSzs = p.category==="shoes" ? ["38", "39", "40", "41", "42", "43", "44"] : ["S", "M", "L", "XL", "2XL"];
  return {
   colors: cols.length ? cols : defaultCols,
   sizes: szs.length ? szs : defaultSzs
