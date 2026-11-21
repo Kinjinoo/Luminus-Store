@@ -1332,3 +1332,15 @@ header, .topbar, nav {
   border-radius: 999px !important;
   backdrop-filter: blur(8px) !important;
 }
+/* === LAYER & EYE-COMFORT POLISH === */
+main, header, footer, .hero, .products-grid {
+  position: relative;
+  z-index: 1;
+}
+
+/* ทำให้การ์ดสินค้าโปร่งแสงนิดๆ เห็นมิติพาร์ติเคิลด้านหลังแบบละมุนตา */
+.product-card {
+  background: rgba(255, 255, 255, 0.92) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
