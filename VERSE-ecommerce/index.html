@@ -63,5 +63,33 @@
   <button class="btn dark wide" type="submit" id="placeOrder">ยืนยันคำสั่งซื้อ</button>
 </form>
 </form><aside class="summary"><h3>สรุปรายการ</h3><div id="checkoutLines"></div><div class="total"><span>สินค้า</span><b id="sumSubtotal"></b></div><div class="total"><span>จัดส่ง</span><b id="sumShipping"></b></div><div class="total grand"><span>ยอดชำระ</span><b id="sumTotal"></b></div></aside></div></div></div>
-<div id="toast" class="toast" role="status"></div>
+<div id="sizeModal" class="modal">
+  <div class="modal-box" style="max-width:560px">
+    <button type="button" class="modal-close" data-close="sizeModal">×</button>
+    <p class="eyebrow">SIZE GUIDE</p>
+    <h2 style="margin-bottom:12px">ตารางขนาดและวิธีวัดไซส์</h2>
+    
+    <!-- รูปภาพประกอบการวัดไซส์ (เปลี่ยน src="size-chart.jpg" ได้หากอัปโหลดรูปเอง) -->
+    <div style="background:#f7f5f0;border-radius:8px;padding:12px;text-align:center;margin-bottom:14px">
+      <svg viewBox="0 0 360 130" style="width:100%;max-width:340px;height:auto;display:block;margin:0 auto">
+        <!-- แผนผังเสื้อ -->
+        <path d="M55 25 L80 18 Q95 28 110 18 L135 25 L150 55 L132 62 L124 45 L124 112 L66 112 L66 45 L58 62 L40 55 Z" fill="#fff" stroke="#222" stroke-width="1.5"/>
+        <line x1="66" y1="54" x2="124" y2="54" stroke="#b91c1c" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <text x="95" y="50" font-size="9" text-anchor="middle" fill="#b91c1c" font-weight="bold">รอบอก (Chest)</text>
+        <line x1="132" y1="25" x2="132" y2="112" stroke="#1d4ed8" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <text x="148" y="82" font-size="9" fill="#1d4ed8" font-weight="bold">ความยาว</text>
+        <!-- แผนผังกางเกง -->
+        <path d="M225 22 L285 22 L295 112 L268 112 L255 58 L242 112 L215 112 Z" fill="#fff" stroke="#222" stroke-width="1.5"/>
+        <line x1="225" y1="28" x2="285" y2="28" stroke="#b91c1c" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <text x="255" y="16" font-size="9" text-anchor="middle" fill="#b91c1c" font-weight="bold">รอบเอว (Waist)</text>
+        <line x1="220" y1="45" x2="290" y2="45" stroke="#047857" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <text x="255" y="42" font-size="9" text-anchor="middle" fill="#047857" font-weight="bold">สะโพก (Hip)</text>
+      </svg>
+      <small class="muted" style="display:block;margin-top:4px">* วัดขนาดจากหน้าผ้าจริง (หน่วยเป็นนิ้ว / เซนติเมตร) อาจคลาดเคลื่อน ±0.5 นิ้ว</small>
+    </div>
+
+    <div id="sizeChartContent" class="table-wrap" style="max-height:280px;overflow-y:auto"></div>
+  </div>
+</div>
+  <div id="toast" class="toast" role="status"></div>
 </body></html>
