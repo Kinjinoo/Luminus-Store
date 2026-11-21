@@ -17,7 +17,7 @@ function getProductOptions(p){
  const cols = splitOpts(p.colors);
  const szs = splitOpts(p.sizes);
  const defaultCols = ["ดำ", "ขาว", "ครีม"];
- const defaultSzs = p.category==="shoes" ? ["38", "39", "40", "41", "42", "43", "44"] : ["S", "M", "L", "XL", "2XL", "3XL", "4XL"];
+ const defaultSzs = p.category==="shoes" ? ["38", "39", "40", "41", "42", "43", "44"] : p.category==="bottoms" ? ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"] : ["S", "M", "L", "XL", "2XL", "3XL", "4XL"];
  return {
   colors: cols.length ? cols : defaultCols,
   sizes: szs.length ? szs : defaultSzs
@@ -48,7 +48,8 @@ const SIZE_CHARTS = {
    ["XL", "32 - 34", "42", "41"],
    ["2XL", "34 - 36", "44", "42"],
    ["3XL", "36 - 38", "46", "43"],
-   ["4XL", "38 - 40", "48", "44"]
+   ["4XL", "38 - 40", "48", "44"],
+   ["5XL", "40 - 42", "50", "45"]
   ]
  },
  dresses: {
