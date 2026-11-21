@@ -64,13 +64,13 @@
 </form>
 </form><aside class="summary"><h3>สรุปรายการ</h3><div id="checkoutLines"></div><div class="total"><span>สินค้า</span><b id="sumSubtotal"></b></div><div class="total"><span>จัดส่ง</span><b id="sumShipping"></b></div><div class="total grand"><span>ยอดชำระ</span><b id="sumTotal"></b></div></aside></div></div></div>
 <div id="sizeModal" class="modal">
-  <div class="modal-box" style="max-width:560px">
-    <button type="button" class="modal-close" data-close="sizeModal">×</button>
-    <p class="eyebrow">SIZE GUIDE</p>
-    <h2 style="margin-bottom:12px">ตารางขนาดและวิธีวัดไซส์</h2>
+  <div class="modal-box" style="background:#ffffff;color:#1c1917;padding:24px;border-radius:14px;box-shadow:0 20px 45px rgba(0,0,0,0.28);max-width:560px;width:92%;position:relative">
+    <button type="button" class="modal-close" data-close="sizeModal" style="position:absolute;top:14px;right:16px;background:#f5f5f4;border:none;width:32px;height:32px;border-radius:50%;font-size:20px;line-height:1;cursor:pointer;color:#1c1917">×</button>
+    <p class="eyebrow" style="color:#78716c;margin-bottom:4px">SIZE GUIDE</p>
+    <h2 style="margin-bottom:14px;color:#1c1917;font-size:20px">ตารางขนาดและวิธีวัดไซส์</h2>
     
-    <!-- รูปภาพประกอบการวัดไซส์ (เปลี่ยน src="size-chart.jpg" ได้หากอัปโหลดรูปเอง) -->
-    <div style="background:#f7f5f0;border-radius:8px;padding:12px;text-align:center;margin-bottom:14px">
+    <!-- รูปภาพประกอบการวัดไซส์ -->
+    <div style="background:#f7f5f0;border:1px solid #e7e5e4;border-radius:10px;padding:12px;text-align:center;margin-bottom:16px">
       <svg viewBox="0 0 360 130" style="width:100%;max-width:340px;height:auto;display:block;margin:0 auto">
         <!-- แผนผังเสื้อ -->
         <path d="M55 25 L80 18 Q95 28 110 18 L135 25 L150 55 L132 62 L124 45 L124 112 L66 112 L66 45 L58 62 L40 55 Z" fill="#fff" stroke="#222" stroke-width="1.5"/>
@@ -85,8 +85,12 @@
         <line x1="220" y1="45" x2="290" y2="45" stroke="#047857" stroke-width="1.5" stroke-dasharray="3,2"/>
         <text x="255" y="42" font-size="9" text-anchor="middle" fill="#047857" font-weight="bold">สะโพก (Hip)</text>
       </svg>
-      <small class="muted" style="display:block;margin-top:4px">* วัดขนาดจากหน้าผ้าจริง (หน่วยเป็นนิ้ว / เซนติเมตร) อาจคลาดเคลื่อน ±0.5 นิ้ว</small>
+      <small style="display:block;margin-top:6px;color:#57534e;font-size:12px">* วัดขนาดจากหน้าผ้าจริง (หน่วยเป็นนิ้ว / เซนติเมตร) อาจคลาดเคลื่อน ±0.5 นิ้ว</small>
     </div>
+
+    <div id="sizeChartContent" class="table-wrap" style="background:#ffffff;border-radius:8px;max-height:280px;overflow-y:auto"></div>
+  </div>
+</div>
 
     <div id="sizeChartContent" class="table-wrap" style="max-height:280px;overflow-y:auto"></div>
   </div>
