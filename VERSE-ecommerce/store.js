@@ -17,7 +17,7 @@ function getProductOptions(p){
  const cols = splitOpts(p.colors);
  const szs = splitOpts(p.sizes);
  const defaultCols = ["ดำ", "ขาว", "ครีม"];
- const defaultSzs = p.category==="shoes" ? ["38", "39", "40", "41", "42", "43"] : ["S", "M", "L", "XL"];
+ const defaultSzs = p.category==="shoes" ? ["38", "39", "40", "41", "42", "43", "44"] : ["S", "M", "L", "XL", "2XL", "3XL", "4XL"];
  return {
   colors: cols.length ? cols : defaultCols,
   sizes: szs.length ? szs : defaultSzs
@@ -32,7 +32,10 @@ const SIZE_CHARTS = {
    ["S", "36 - 38", "25", "16.5"],
    ["M", "38 - 40", "26", "17.5"],
    ["L", "40 - 42", "27", "18.5"],
-   ["XL", "42 - 44", "28", "19.5"]
+   ["XL", "42 - 44", "28", "19.5"],
+   ["2XL", "44 - 46", "29", "20.5"],
+   ["3XL", "46 - 48", "30", "21.5"],
+   ["4XL", "48 - 50", "31", "22.5"]
   ]
  },
  bottoms: {
@@ -64,7 +67,8 @@ const SIZE_CHARTS = {
    ["40", "25.0 ซม.", "US 7"],
    ["41", "25.5 ซม.", "US 8"],
    ["42", "26.0 ซม.", "US 8.5"],
-   ["43", "26.5 ซม.", "US 9.5"]
+   ["43", "26.5 ซม.", "US 9.5"],
+   ["44", "27.0 ซม.", "US 10"]
   ]
  }
 };
